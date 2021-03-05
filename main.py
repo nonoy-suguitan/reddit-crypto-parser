@@ -4,6 +4,7 @@ import requests
 
 # Parses through reddit posts and counts the nunmber of times certain words are mentioned.
 
+#add main
 #create dictionary of mapping crypto terms
 #argument for time range - default 1 week
 
@@ -17,17 +18,26 @@ data = {'grant_type': 'password',
 
 headers = {'User-Agent': 'stakemyeth/0.0.1'}
 
-response = requests.post('https://www.reddit.com/api/v1/access_token',
-                          auth=auth,
-                          data=data,
-                          headers=headers)
+def authenticate():
+    response = requests.post('https://www.reddit.com/api/v1/access_token',
+                            auth=auth,
+                            data=data,
+                            headers=headers)
 
-token = response.json()['access_token']
+    token = response.json()['access_token']
 
-headers['Authorization'] = f'bearer {token}'
+    headers['Authorization'] = f'bearer {token}'
+    return response
 
-reponse = requests.get('https://oauth.reddit.com/api/v1/me', headers=headers)
+def main():
+    authenticate()
 
-print(json.dumps(reponse.json(), indent=4))
+    reponse = requests.get('https://oauth.reddit.com/api/v1/me', headers=headers)
 
-print(f"{key} hello world")
+    print(json.dumps(reponse.json(), indent=4))
+
+    print(f"{headers} hello world")
+
+
+if __name__ == "__main__":
+    main()
