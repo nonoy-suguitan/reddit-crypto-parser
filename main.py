@@ -1,4 +1,6 @@
 import json
+import pandas
+import praw
 import properties
 import requests
 
@@ -16,7 +18,7 @@ data = {'grant_type': 'password',
         'username': properties.username,
         'password': properties.password}
 
-headers = {'User-Agent': 'stakemyeth/0.0.1'}
+headers = {'User-Agent': properties.user_agent}
 
 def authenticate():
     response = requests.post('https://www.reddit.com/api/v1/access_token',
@@ -27,16 +29,34 @@ def authenticate():
     token = response.json()['access_token']
 
     headers['Authorization'] = f'bearer {token}'
-    return response
+
+    reddit = praw.Reddit(
+        client_id=properties.personal_use_script,
+        client_secret=properties.secret,
+        user_agent=properties.user_agent,
+    )
+
+    return reddit
 
 def main():
-    authenticate()
+    reddit = authenticate()
 
-    reponse = requests.get('https://oauth.reddit.com/api/v1/me', headers=headers)
+    #reponse = requests.get('https://oauth.reddit.com/api/v1/me', headers=headers)
 
-    print(json.dumps(reponse.json(), indent=4))
+    data = pandas.DataFrame()
+    params = {'limit': 5}
+
+#    response = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
+#                       headers=headers,
+#                       params=params)
+
+#    response = requests.get("https://oauth.reddit.com/r/CryptoCurrency/comments/lysxbc",
+#                       headers=headers)
+
+#    print(json.dumps(response.json(), indent=4))
 
     print(f"{headers} hello world")
+    print(reddit.read_only)
 
 
 if __name__ == "__main__":
