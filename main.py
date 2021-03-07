@@ -41,6 +41,36 @@ def authenticate():
 
     return reddit
 
+def ingest_data():
+    # initialize data frames
+    reddit_posts = pandas.DataFrame()
+    params = {'limit': 5}
+
+    
+    res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
+                       headers=headers,
+                       params=params)
+
+    new_df = df_from_response(res)
+
+    reddit_posts = reddit_posts.append(new_df, ignore_index=True)
+
+    return reddit_posts
+
+def process_data(reddit_praw_auth,reddit_posts):
+    for index, rows in reddit_posts.iterrows():
+        print(rows.id)
+        submission = reddit_praw_auth.submission(id=rows.id)
+
+        submission.comments.replace_more(limit=None)
+        for comment in submission.comments.list():
+            print(comment.body)
+            print("-----------")
+            for coin in coin_dictionary:
+                if any(ext in comment.body.lower() for ext in coin):
+                    coin_dictionary[coin] += 1
+
+
 def df_from_response(res):
     # initialize temp dataframe for batch of data in response
     df = pandas.DataFrame()
@@ -70,42 +100,22 @@ def print_inventory(dct):
 
 def main():
     # authenticate and initialize praw
-    reddit = authenticate()
+    reddit_praw_auth = authenticate()
 
-    # initialize data frames
-    reddit_posts = pandas.DataFrame()
-    params = {'limit': 5}
-    """
-    res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
-                       headers=headers,
-                       params=params)
+    # ingest data
+    reddit_posts = ingest_data()
 
-    new_df = df_from_response(res)
+    # process data
+    process_data(reddit_praw_auth,reddit_posts)
 
-    reddit_posts = reddit_posts.append(new_df, ignore_index=True)
-
-#    print(json.dumps(response.json(), indent=4))
-
-    print(reddit_posts)
-    print(f"{headers} hello world")
-
-    for index, rows in reddit_posts.iterrows():
-        print(rows.id)
-        submission = reddit.submission(id=rows.id)
-
-        submission.comments.replace_more(limit=None)
-        for comment in submission.comments.list():
-            print(comment.body)
-            print("-----------")
-
-    print(f"{headers} hello world")
-    """
-
-    for coin in coin_dictionary:
-        if any(ext in test_string.lower() for ext in coin):
-            coin_dictionary[coin] += 1
+    # print result
     print_inventory(coin_dictionary)
 
+
+#random prints
+#print(json.dumps(response.json(), indent=4))
+#print(reddit_posts)
+#print(f"{headers} hello world")
 
 if __name__ == "__main__":
     main()
