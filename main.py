@@ -1,17 +1,19 @@
 from datetime import datetime
 import json
 import pandas
+import pprint
 import praw
 import properties
 import requests
 
-# Parses through reddit posts and counts the nunmber of times certain words are mentioned.
+INITIAL_COUNT_VAL = 0
 
-#add main
-#create dictionary of mapping crypto terms
-#argument for time range - default 1 week
+coin_dictionary = {
+    ("bitcoin", "btc", "xbt") : INITIAL_COUNT_VAL,
+    ("ethereum", "eth") : INITIAL_COUNT_VAL
+}
 
-key = properties.personal_use_script
+test_string = "When companies acquiring Bitcoin doesn't make the BTCnews anymore, that's when you know it's mainstream."
 
 auth = requests.auth.HTTPBasicAuth(properties.personal_use_script, properties.secret)
 
@@ -61,6 +63,11 @@ def df_from_response(res):
 
     return df
 
+def print_inventory(dct):
+    print("Items held:")
+    for item, amount in dct.items():  # dct.iteritems() in Python 2
+        print("{} ({})".format(item, amount))
+
 def main():
     # authenticate and initialize praw
     reddit = authenticate()
@@ -68,7 +75,7 @@ def main():
     # initialize data frames
     reddit_posts = pandas.DataFrame()
     params = {'limit': 5}
-
+    """
     res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
                        headers=headers,
                        params=params)
@@ -76,9 +83,6 @@ def main():
     new_df = df_from_response(res)
 
     reddit_posts = reddit_posts.append(new_df, ignore_index=True)
-
-#    response = requests.get("https://oauth.reddit.com/r/CryptoCurrency/comments/lysxbc",
-#                       headers=headers)
 
 #    print(json.dumps(response.json(), indent=4))
 
@@ -95,6 +99,13 @@ def main():
             print("-----------")
 
     print(f"{headers} hello world")
+    """
+
+    for coin in coin_dictionary:
+        if any(ext in test_string.lower() for ext in coin):
+            coin_dictionary[coin] += 1
+    print_inventory(coin_dictionary)
+
 
 if __name__ == "__main__":
     main()
