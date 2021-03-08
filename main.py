@@ -37,14 +37,24 @@ def ingest_data():
     reddit_posts = pandas.DataFrame()
     params = {'limit': 100}
 
-    
-    res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
-                       headers=headers,
-                       params=params)
+    # loop through 10 times (returning 1K posts)
+    for i in range(10):
+        res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
+                        headers=headers,
+                        params=params)
 
-    new_df = df_from_response(res)
+        # get dataframe from response
+        new_df = df_from_response(res)
 
-    reddit_posts = reddit_posts.append(new_df, ignore_index=True)
+        # take the final row (oldest entry)
+        row = new_df.iloc[len(new_df)-1]
+        # create fullname
+        fullname = row['kind'] + '_' + row['id']
+        # add/update fullname in params
+        params['after'] = fullname
+
+        # append new_df to data
+        reddit_posts = reddit_posts.append(new_df, ignore_index=True)
 
     return reddit_posts
 
@@ -85,7 +95,6 @@ def df_from_response(res):
     return df
 
 def print_inventory(dct):
-    #sorted_dictionary = dict(sorted(dct.items(), key=lambda item: item[1]))
     sorted_dictionary = dict(reversed(sorted(dct.items(), key=lambda item: item[1])))
     print("Items held:")
     for item, amount in sorted_dictionary.items():  # dct.iteritems() in Python 2
@@ -104,7 +113,6 @@ def main():
 
     # print result
     print_inventory(properties.coin_dictionary)
-
 
 #random prints
 #print(json.dumps(response.json(), indent=4))

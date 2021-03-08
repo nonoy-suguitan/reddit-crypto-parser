@@ -6,3 +6,11 @@ resources:
 	praw, get comments from posts:
 		https://stackoverflow.com/questions/36366388/get-all-comments-from-a-specific-reddit-thread-in-python
 		https://praw.readthedocs.io/en/latest/tutorials/comments.html
+		
+enhancements:
+	sentiment analysis (NLTK library)
+	mathplot lib (for graphing)
+	print out date post date created of first dataframe row and last dataframe row
+	create github action to automate application execution (once every day?)
+	output comments and posts to a file
+	gets stuck on daily discussion?
