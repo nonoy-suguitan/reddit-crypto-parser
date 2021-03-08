@@ -6,15 +6,6 @@ import praw
 import properties
 import requests
 
-INITIAL_COUNT_VAL = 0
-
-coin_dictionary = {
-    ("bitcoin", "btc", "xbt") : INITIAL_COUNT_VAL,
-    ("ethereum", "eth") : INITIAL_COUNT_VAL
-}
-
-test_string = "When companies acquiring Bitcoin doesn't make the BTCnews anymore, that's when you know it's mainstream."
-
 auth = requests.auth.HTTPBasicAuth(properties.personal_use_script, properties.secret)
 
 data = {'grant_type': 'password',
@@ -44,7 +35,7 @@ def authenticate():
 def ingest_data():
     # initialize data frames
     reddit_posts = pandas.DataFrame()
-    params = {'limit': 5}
+    params = {'limit': 100}
 
     
     res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
@@ -66,9 +57,9 @@ def process_data(reddit_praw_auth,reddit_posts):
         for comment in submission.comments.list():
             print(comment.body)
             print("-----------")
-            for coin in coin_dictionary:
+            for coin in properties.coin_dictionary:
                 if any(ext in comment.body.lower() for ext in coin):
-                    coin_dictionary[coin] += 1
+                    properties.coin_dictionary[coin] += 1
 
 
 def df_from_response(res):
@@ -94,9 +85,12 @@ def df_from_response(res):
     return df
 
 def print_inventory(dct):
+    #sorted_dictionary = dict(sorted(dct.items(), key=lambda item: item[1]))
+    sorted_dictionary = dict(reversed(sorted(dct.items(), key=lambda item: item[1])))
     print("Items held:")
-    for item, amount in dct.items():  # dct.iteritems() in Python 2
-        print("{} ({})".format(item, amount))
+    for item, amount in sorted_dictionary.items():  # dct.iteritems() in Python 2
+        if (amount != 0):
+            print("{} ({})".format(item, amount))
 
 def main():
     # authenticate and initialize praw
@@ -109,7 +103,7 @@ def main():
     process_data(reddit_praw_auth,reddit_posts)
 
     # print result
-    print_inventory(coin_dictionary)
+    print_inventory(properties.coin_dictionary)
 
 
 #random prints
