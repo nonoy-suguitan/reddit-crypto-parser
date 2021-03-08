@@ -14,3 +14,4 @@ enhancements:
 	create github action to automate application execution (once every day?)
 	output comments and posts to a file
 	gets stuck on daily discussion?
+	multithread the ignest of comments
