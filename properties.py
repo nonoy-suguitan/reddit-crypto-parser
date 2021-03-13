@@ -4,6 +4,8 @@ user_agent = "x"
 username = "x"
 password = "x"
 
+coinmarketcap_api_key = "x"
+
 INITIAL_COUNT_VAL = 0
 coin_dictionary = {
     ("bitcoin", "btc", "xbt") : INITIAL_COUNT_VAL,
