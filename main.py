@@ -99,7 +99,7 @@ def print_inventory(dct):
     sorted_dictionary = dict(reversed(sorted(dct.items(), key=lambda item: item[1])))
     print("Items held:")
     for item, amount in sorted_dictionary.items():  # dct.iteritems() in Python 2
-        if (amount != 0):
+        if (amount > 9):
             print("{} ({})".format(item, amount))
 
 def main():
