@@ -1,4 +1,5 @@
 from datetime import datetime
+import coinmarketcap
 import json
 import pandas
 import pprint
@@ -38,7 +39,7 @@ def ingest_data():
     params = {'limit': 100}
 
     # loop through 10 times (returning 1K posts)
-    for i in range(10):
+    for i in range(2):
         res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
                         headers=headers,
                         params=params)
@@ -58,7 +59,7 @@ def ingest_data():
 
     return reddit_posts
 
-def process_data(reddit_praw_auth,reddit_posts):
+def process_data(reddit_praw_auth,reddit_posts,coin_dictionary):
     for index, rows in reddit_posts.iterrows():
         print(rows.id)
         submission = reddit_praw_auth.submission(id=rows.id)
@@ -67,9 +68,9 @@ def process_data(reddit_praw_auth,reddit_posts):
         for comment in submission.comments.list():
             print(comment.body)
             print("-----------")
-            for coin in properties.coin_dictionary:
+            for coin in coin_dictionary:
                 if any(ext in comment.body.lower() for ext in coin):
-                    properties.coin_dictionary[coin] += 1
+                    coin_dictionary[coin] += 1
 
 
 def df_from_response(res):
@@ -102,17 +103,19 @@ def print_inventory(dct):
             print("{} ({})".format(item, amount))
 
 def main():
-    # authenticate and initialize praw
+    # authenticate and initialize
     reddit_praw_auth = authenticate()
+    coin_listing = coinmarketcap.ingest_coin_listing()
+    coin_dictionary = coinmarketcap.process_data(coin_listing)
 
     # ingest data
     reddit_posts = ingest_data()
 
     # process data
-    process_data(reddit_praw_auth,reddit_posts)
+    process_data(reddit_praw_auth,reddit_posts,coin_dictionary)
 
     # print result
-    print_inventory(properties.coin_dictionary)
+    print_inventory(coin_dictionary)
 
 #random prints
 #print(json.dumps(response.json(), indent=4))
