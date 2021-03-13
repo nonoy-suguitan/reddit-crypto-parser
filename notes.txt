@@ -15,6 +15,5 @@ enhancements:
 	output comments and posts to a file
 	gets stuck on daily discussion?
 	multithread the ignest of comments
-	*get coin_dictionary info from coingecko via api call
 	*include the post created date (not comment date) - this is alllow the data to be graphed, over time.
-	limit display, dont show anything below 10
+	*initial write up read me - just a quick description and required properties.py settings
