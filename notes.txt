@@ -8,12 +8,15 @@ resources:
 		https://praw.readthedocs.io/en/latest/tutorials/comments.html
 		
 enhancements:
-	sentiment analysis (NLTK library)
-	mathplot lib (for graphing)
-	print out date post date created of first dataframe row and last dataframe row
-	create github action to automate application execution (once every day?)
-	output comments and posts to a file
-	gets stuck on daily discussion?
-	multithread the ignest of comments
+	-sentiment analysis (NLTK library)
+	-mathplot lib (for graphing)
+	-print out date post date created of first dataframe row and last dataframe row
+	-create github action to automate application execution (once every day?)
+	-output comments and posts to a file
+	-gets stuck on daily discussion?
+	-multithread the ignest of comments
 	*include the post created date (not comment date) - this is alllow the data to be graphed, over time.
 	*initial write up read me - just a quick description and required properties.py settings
+	* filter out special chars (!, $, etc) and replace with space
+	* split comment by space, then check with coni dictionary - this should remove a lot of the false positives, but will make the execution slower
+	* make sure the script is not reading a duplicate comment (read already in a previous execution)
