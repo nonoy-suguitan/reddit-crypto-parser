@@ -1,11 +1,13 @@
-from datetime import datetime
 import coinmarketcap
 import json
+import nltk
 import pandas
 import pprint
 import praw
 import properties
 import requests
+from nltk.corpus import stopwords
+from datetime import datetime
 
 auth = requests.auth.HTTPBasicAuth(properties.personal_use_script, properties.secret)
 
@@ -39,7 +41,7 @@ def ingest_data():
     params = {'limit': 100}
 
     # loop through 10 times (returning 1K posts)
-    for i in range(2):
+    for i in range(10):
         res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
                         headers=headers,
                         params=params)
@@ -63,13 +65,18 @@ def process_data(reddit_praw_auth,reddit_posts,coin_dictionary):
     for index, rows in reddit_posts.iterrows():
         print(rows.id)
         submission = reddit_praw_auth.submission(id=rows.id)
-
+        submission.comment_sort = "top"
         submission.comments.replace_more(limit=None)
+
         for comment in submission.comments.list():
-            print(comment.body)
-            print("-----------")
+            remove_special_chars = comment.body.translate ({ord(c): " " for c in "!@#$%^&*()[]{};:,./<>?\|`~-=_+"})
+            lower_string_split = remove_special_chars.lower().split()
+            comment_filter_out_stopwords = [word for word in lower_string_split if word not in stopwords.words('english')]
+
+            print(comment_filter_out_stopwords)
+
             for coin in coin_dictionary:
-                if any(ext in comment.body.lower() for ext in coin):
+                if any(ext in comment_filter_out_stopwords for ext in coin):
                     coin_dictionary[coin] += 1
 
 

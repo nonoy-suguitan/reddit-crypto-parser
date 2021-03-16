@@ -9,7 +9,7 @@ def ingest_coin_listing():
     headers = {'X-CMC_PRO_API_KEY': properties.coinmarketcap_api_key,
             'Accept': 'application/json'}
 
-    response = requests.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=200&convert=USD',
+    response = requests.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=250&convert=USD',
                         headers=headers)
     
     print(json.dumps(response.json(), indent=4))
