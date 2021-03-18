@@ -43,5 +43,6 @@ jobs:
         password: ${{ secrets.password }}
         coinmarketcap_api_key: ${{ secrets.coinmarketcap_api_key }}
       run: |
+        python -m nltk.downloader stopwords
         python main.py
           
