@@ -38,10 +38,10 @@ def authenticate():
 def ingest_data():
     # initialize data frames
     reddit_posts = pandas.DataFrame()
-    params = {'limit': 100}
+    params = {'limit': 50}
 
     # loop through 10 times (returning 1K posts)
-    for i in range(10):
+    for i in range(1):
         res = requests.get("https://oauth.reddit.com/r/CryptoCurrency/new",
                         headers=headers,
                         params=params)
