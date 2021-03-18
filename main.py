@@ -123,13 +123,13 @@ def main():
     coin_dictionary = coinmarketcap.process_data(coin_listing)
 
     # ingest data
-    #reddit_posts = ingest_data()
+    reddit_posts = ingest_data()
 
     # process data
-    #process_data(reddit_praw_auth,reddit_posts,coin_dictionary)
+    process_data(reddit_praw_auth,reddit_posts,coin_dictionary)
 
     # print result
-    #print_inventory(coin_dictionary)
+    print_inventory(coin_dictionary)
 
 #random prints
 #print(json.dumps(response.json(), indent=4))

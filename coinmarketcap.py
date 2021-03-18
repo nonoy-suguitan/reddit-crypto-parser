@@ -17,7 +17,6 @@ def ingest_coin_listing():
     return response
 
 def process_data(coin_listing):
-    print("hello")
     for coin in coin_listing.json()['data']:
         dictionary_key1 = coin['name'].lower()
         dictionary_key2 = coin['symbol'].lower()
