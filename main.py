@@ -12,12 +12,19 @@ from datetime import datetime
 auth = requests.auth.HTTPBasicAuth(properties.personal_use_script, properties.secret)
 
 data = {'grant_type': 'password',
-        'username': properties.username,
+        'username': properties.reddit_py_username,
         'password': properties.password}
 
 headers = {'User-Agent': properties.user_agent}
 
 def authenticate():
+    print("debug properties:")
+    print(properties.personal_use_script)
+    print(properties.secret)
+    print(properties.user_agent)
+    print(properties.reddit_py_username)
+    print(properties.password)
+    print(properties.coinmarketcap_api_key)
     response = requests.post('https://www.reddit.com/api/v1/access_token',
                             auth=auth,
                             data=data,

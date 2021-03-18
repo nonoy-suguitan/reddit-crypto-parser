@@ -35,6 +35,13 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run the script
+      env: # environment variables
+        personal_use_script: ${{ secrets.personal_use_script }}
+        secret: ${{ secrets.secret }}
+        user_agent: ${{ secrets.user_agent }}
+        reddit_py_username: ${{ secrets.reddit_py_username }}
+        password: ${{ secrets.password }}
+        coinmarketcap_api_key: ${{ secrets.coinmarketcap_api_key }}
       run: |
         python main.py
           
