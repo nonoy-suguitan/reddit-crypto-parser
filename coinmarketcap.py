@@ -12,7 +12,7 @@ def ingest_coin_listing():
     response = requests.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=250&convert=USD',
                         headers=headers)
     
-    print(json.dumps(response.json(), indent=4))
+    #print(json.dumps(response.json(), indent=4))
 
     return response
 

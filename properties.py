@@ -1,7 +1,9 @@
-personal_use_script = "x"
-secret = "x"
-user_agent = "x"
-username = "x"
-password = "x"
+import os
 
-coinmarketcap_api_key = "x"
+personal_use_script = os.getenv('personal_use_script')
+secret = os.getenv('secret')
+user_agent = os.getenv('user_agent')
+username = os.getenv('reddit_py_username')
+password = os.getenv('password')
+
+coinmarketcap_api_key = os.getenv('coinmarketcap_api_key')

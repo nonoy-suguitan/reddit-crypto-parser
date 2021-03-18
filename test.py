@@ -1,4 +1,5 @@
 import nltk
+import os
 from nltk.corpus import stopwords
 
 
@@ -25,3 +26,7 @@ for coin in coin_dictionary:
 
 
 print(coin_dictionary)
+
+PATH = os.getenv('PATH')
+
+print(PATH)
